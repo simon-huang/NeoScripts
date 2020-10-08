@@ -3,7 +3,6 @@
 // @name           Neopets - Item Rarity in Quick Stock
 // @include        http://www.neopets.com/inventory.phtml
 // @include        http://www.neopets.com/quickstock.phtml
-// @include        http://www.neopets.com/quickstock.phtml?r=
 // ==/UserScript==
 
 if (window.location.href == "http://www.neopets.com/inventory.phtml") {
@@ -21,7 +20,7 @@ if (window.location.href == "http://www.neopets.com/inventory.phtml") {
     window.localStorage.setItem('rarities', JSON.stringify(rarities));
 }
 
-if (window.location.href == "http://www.neopets.com/quickstock.phtml" || window.location.href == "http://www.neopets.com/quickstock.phtml?r=") {
+if (window.location.href == "http://www.neopets.com/quickstock.phtml") {
     var items = document.getElementsByName("quickstock")[0].childNodes[1].childNodes[1];
     var itemRarities = JSON.parse(window.localStorage.getItem('rarities'));
     var parentheses;
