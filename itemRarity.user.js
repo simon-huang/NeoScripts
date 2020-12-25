@@ -10,6 +10,10 @@ if (window.location.href == "http://www.neopets.com/inventory.phtml") {
     var inventory = document.querySelector('[class = "inventory"]').children[0];
     for (var row = 0; row < inventory.children.length; row++) {
         for (var item = 0; item < inventory.children[row].children.length; item++) {
+            if (/trading/.test(inventory.children[row].children[item].lastElementChild.innerText) ||
+                /auctioned/.test(inventory.children[row].children[item].lastElementChild.innerText)) {
+                continue;
+            }
             if (inventory.children[row].children[item].lastElementChild.tagName == "SPAN") {
                 rarities.push([inventory.children[row].children[item].lastElementChild.lastElementChild.innerText, inventory.children[row].children[item].lastElementChild.lastElementChild.getAttribute("style")]);
             } else {
