@@ -1,6 +1,6 @@
 // ==UserScript==
 // @author         smthngsaid
-// @name           Neopets - Battledome Prizes Counter
+// @name           Neopets - Battledome Winnings Counter
 // @description    Keeps a count of the items and Neopoints you've won today
 // @include        http://www.neopets.com/dome/arena.phtml
 // ==/UserScript==
@@ -45,15 +45,17 @@ function displayTotals() {
         window.localStorage.setItem('battledomeDate', currentDate);
     }
     //Add any new winnings and store the new totals
+    //Only if you won AND there was a reward
     if (/you have earned the following rewards/.test(rewardsBox.children[1].textContent) &&
-        !/Sorry, you didn't win anything this battle/.test(lootAndLimits[1].textContent)) {
-        for (let i = 0; i < lootAndLimits.length; i++) {
-            if (lootAndLimits[i].children[0].children[0].src == "http://images.neopets.com/reg/started_bagofnp.gif") {
-                let np = lootAndLimits[i].children[0].children[2].innerText;
+        !(lootAndLimits[1] && /Sorry, you didn't win anything this battle/.test(lootAndLimits[1].textContent))) {
+        for (let i = 0; i < lootAndLimits[0].children.length; i++) {
+            //NP can only be the first item
+            if (lootAndLimits[0].children[i].children[0].src == "http://images.neopets.com/reg/started_bagofnp.gif") {
+                let np = lootAndLimits[0].children[0].children[2].innerText;
                 //remove the ' Neopoints' part of the string
                 nPCount += parseInt(np.slice(0, -10));
-            } else if (lootAndLimits[i].children[0].children[0].nodeName == 'IMG') {
-                itemCount++;
+            } else if (lootAndLimits[0].children[i].children[0].nodeName == 'IMG') {
+                itemCount += 1;
             }
         }
         window.localStorage.setItem('battledomeNPCount', nPCount);
