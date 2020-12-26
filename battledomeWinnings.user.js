@@ -18,17 +18,17 @@ document.querySelector("button#fight").addEventListener("click", function () {
 function displayTotals() {
     //If there's lag and the turn doesn't process right away
     //Or the fight didn't end in one turn, call the function again after a short delay
-    let lootAndLimits = document.getElementById("bd_rewardsloot").children[0].children;
-    if (lootAndLimits.length == 1 && lootAndLimits[0].textContent == '') {
+    let lootAndLimits = document.getElementById("bd_rewardsloot");
+    if (lootAndLimits.textContent == '') {
         console.log('Call it again after 3 seconds');
         setTimeout(function () {
             displayTotals();
         }, 3000);
         return;
     }
-    //Make sure a prior call hasn't already succeeded
+    //Make sure a prior call hasn't already successfully added a counter
     let rewardsBox = document.getElementById("bd_rewards");
-    if (rewardsBox.children[1].children.length > 0) {
+    if (rewardsBox.children[1].hasChildNodes()) {
         return;
     }
     //Grab stored info. If it's a new day, reset everything.
@@ -46,8 +46,8 @@ function displayTotals() {
     }
     //Add any new winnings and store the new totals
     //Only if you won AND there was a reward
-    if (/you have earned the following rewards/.test(rewardsBox.children[1].textContent) &&
-        !(lootAndLimits[1] && /Sorry, you didn't win anything this battle/.test(lootAndLimits[1].textContent))) {
+    if (/you have earned the following rewards/.test(rewardsBox.textContent) &&
+        !/Sorry, you didn't win anything this battle/.test(lootAndLimits.textContent)) {
         for (let i = 0; i < lootAndLimits[0].children.length; i++) {
             //NP can only be the first item
             if (lootAndLimits[0].children[i].children[0].src == "http://images.neopets.com/reg/started_bagofnp.gif") {
