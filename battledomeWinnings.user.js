@@ -1,36 +1,13 @@
 // ==UserScript==
 // @author         smthngsaid
-// @name           Neopets - Battledome Winnings Counter
+// @name           Neopets - Battledome Prize Counter
 // @description    Keeps a count of the items and Neopoints you've won today
 // @include        http://www.neopets.com/dome/arena.phtml
 // ==/UserScript==
-
-//For some reason I can't add a click handler to the "COLLECT REWARDS" button
-//Even though I can do other things, like modify its appearanace
-//I settled for adding a click handler to the "FIGHT!" button
-//It hears the click to process the first turn
-document.querySelector("button#fight").addEventListener("click", function () {
-    setTimeout(function () {
-        displayTotals();
-    }, 2000);
+$('#arenacontainer').on('click', '.end_game', function () {
+    displayTotals();
 });
-
 function displayTotals() {
-    //If there's lag and the turn doesn't process right away
-    //Or the fight didn't end in one turn, call the function again after a short delay
-    let lootAndLimits = document.getElementById("bd_rewardsloot");
-    if (lootAndLimits.textContent == '') {
-        console.log('Call it again after 3 seconds');
-        setTimeout(function () {
-            displayTotals();
-        }, 3000);
-        return;
-    }
-    //Make sure a prior call hasn't already successfully added a counter
-    let rewardsBox = document.getElementById("bd_rewards");
-    if (rewardsBox.children[1].hasChildNodes()) {
-        return;
-    }
     //Grab stored info. If it's a new day, reset everything.
     var d = new Date();
     var currentDate = d.getDate();
@@ -44,17 +21,14 @@ function displayTotals() {
         window.localStorage.setItem('battledomeItemCount', itemCount);
         window.localStorage.setItem('battledomeDate', currentDate);
     }
-    //Add any new winnings and store the new totals
-    //Only if you won AND there was a reward
-    if (/you have earned the following rewards/.test(rewardsBox.textContent) &&
-        !/Sorry, you didn't win anything this battle/.test(lootAndLimits.textContent)) {
-        for (let i = 0; i < lootAndLimits[0].children.length; i++) {
-            //NP can only be the first item
-            if (lootAndLimits[0].children[i].children[0].src == "http://images.neopets.com/reg/started_bagofnp.gif") {
-                let np = lootAndLimits[0].children[0].children[2].innerText;
-                //remove the ' Neopoints' part of the string
-                nPCount += parseInt(np.slice(0, -10));
-            } else if (lootAndLimits[0].children[i].children[0].nodeName == 'IMG') {
+    //Add any winnings and store the new totals
+    let prizes = document.querySelectorAll("#bd_rewardsloot .prizname");
+    if (prizes.length > 0) {
+        for (let i = 0; i < prizes.length; i++) {
+            if (/\d+ Neopoints/.test(prizes[i].textContent)) {
+                let np = prizes[i].textContent.split(' ')[0];
+                nPCount += parseInt(np);
+            } else {
                 itemCount += 1;
             }
         }
@@ -62,9 +36,15 @@ function displayTotals() {
         window.localStorage.setItem('battledomeItemCount', itemCount);
     }
     //Display the totals
-    var counter = document.createElement("span");
-    counter.setAttribute("nowrap", "nowrap")
-    counter.textContent = ' Total items: ' + itemCount + ', NP: ' + nPCount;
-    counter.setAttribute("style", "font-weight: bold;")
-    rewardsBox.children[1].appendChild(counter);
+    let rewardsBox = document.getElementById("bd_rewards");
+    let counter = document.createElement("span");
+    counter.setAttribute("nowrap", "nowrap");
+    let items = document.createElement("strong");
+    items.textContent = ' Items: ' + itemCount;
+    let separator = document.createElement("span");
+    separator.textContent = ' | ';
+    separator.setAttribute("style", "font-weight: normal;");
+    let np = document.createElement("strong");
+    np.textContent = 'NP: ' + nPCount;
+    rewardsBox.children[1].appendChild(counter).appendChild(items).appendChild(separator).appendChild(np);
 }
