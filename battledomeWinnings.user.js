@@ -8,6 +8,10 @@ $('#arenacontainer').on('click', '.end_game', function () {
     displayTotals();
 });
 function displayTotals() {
+    let rewardsBox = document.getElementById("bd_rewards");
+    if (rewardsBox.children[1].hasChildNodes()) {
+        return;
+    }
     //Grab stored info. If it's a new day, reset everything.
     var d = new Date();
     var currentDate = d.getDate();
@@ -36,7 +40,6 @@ function displayTotals() {
         window.localStorage.setItem('battledomeItemCount', itemCount);
     }
     //Display the totals
-    let rewardsBox = document.getElementById("bd_rewards");
     let counter = document.createElement("span");
     counter.setAttribute("nowrap", "nowrap");
     let items = document.createElement("strong");
