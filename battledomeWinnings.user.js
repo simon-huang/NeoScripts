@@ -4,12 +4,14 @@
 // @description    Keeps a count of the items and Neopoints you've won today
 // @include        http://www.neopets.com/dome/arena.phtml
 // ==/UserScript==
-$('#arenacontainer').on('click', '.end_game', function () {
-    displayTotals();
-});
+window.onload = function () {
+    $('#arenacontainer').on('click', '.end_game', function () {
+        displayTotals();
+    });
+}
 function displayTotals() {
     let rewardsBox = document.getElementById("bd_rewards");
-    if (rewardsBox.children[1].hasChildNodes()) {
+    if (rewardsBox.children[1].children.length > 0) {
         return;
     }
     //Grab stored info. If it's a new day, reset everything.
