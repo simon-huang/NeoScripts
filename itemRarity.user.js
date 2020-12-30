@@ -1,44 +1,41 @@
 // ==UserScript==
 // @author         smthngsaid
-// @name           Neopets - Item Rarity in Quick Stock
+// @name           Neopets - Item Details in Quick Stock (not Github)
 // @include        http://www.neopets.com/inventory.phtml
 // @include        http://www.neopets.com/quickstock.phtml
 // ==/UserScript==
-
 if (window.location.href == "http://www.neopets.com/inventory.phtml") {
-    var rarities = [];
-    var inventory = document.querySelector('[class = "inventory"]').children[0];
-    for (var row = 0; row < inventory.children.length; row++) {
-        for (var item = 0; item < inventory.children[row].children.length; item++) {
-            if (/trading/.test(inventory.children[row].children[item].lastElementChild.innerText) ||
-                /auctioned/.test(inventory.children[row].children[item].lastElementChild.innerText)) {
-                continue;
+    $(document).ajaxSuccess(
+        function () {
+            let rarities = {};
+            let names = $('#tableRowsId .item-name');
+            let details = $('#tableRowsId .item-subname');
+            for (let i = 0; i < details.length; i++) {
+                if (details[i].innerText == '' || /trading/.test(details[i].innerText) || /auctioned/.test(details[i].innerText)) {
+                    continue;
+                } else {
+                    let d = details[i].innerText.split('\n');
+                    let color = details[i].lastElementChild.lastElementChild.getAttribute("style");
+                    rarities[names[i].innerText] = d.length > 1 ? [d[d.length - 1], color] : [d[0], color];
+                }
             }
-            if (inventory.children[row].children[item].lastElementChild.tagName == "SPAN") {
-                rarities.push([inventory.children[row].children[item].lastElementChild.lastElementChild.innerText, inventory.children[row].children[item].lastElementChild.lastElementChild.getAttribute("style")]);
-            } else {
-                rarities.push([]);
-            }
+            window.localStorage.setItem('rarities', JSON.stringify(rarities));
         }
-    }
-    window.localStorage.setItem('rarities', JSON.stringify(rarities));
+    );
 }
 
 if (window.location.href == "http://www.neopets.com/quickstock.phtml") {
-    var items = document.getElementsByName("quickstock")[0].childNodes[1].childNodes[1];
-    var itemRarities = JSON.parse(window.localStorage.getItem('rarities'));
-    var parentheses;
+    let items = $('[name="quickstock"] tr td[align="left"]');
+    let itemRarities = JSON.parse(window.localStorage.getItem('rarities'));
     var indexOfCurrentRarity = itemRarities.length - 1;
-    for (var i = 0; i < items.children.length; i++) {
-        if (items.children[i].firstElementChild.innerText != "Object Name" && items.children[i].firstElementChild.innerText != "Check All" && items.children[i].firstElementChild.innerText != "    ") {
-            if (itemRarities[indexOfCurrentRarity].length > 0) {
-                parentheses = document.createElement("SPAN");
-                parentheses.setAttribute("style", "display: inline-block;");
-                parentheses.setAttribute("style", itemRarities[indexOfCurrentRarity][1]);
-                parentheses.innerText = " " + itemRarities[indexOfCurrentRarity][0];
-                items.children[i].firstElementChild.appendChild(parentheses);
-            }
-            indexOfCurrentRarity--;
+    for (let i = 0; i < items.length; i++) {
+        let name = items[i].innerText;
+        if (itemRarities[name]) {
+            let parentheses = document.createElement("SPAN");
+            parentheses.setAttribute("style", "display: inline-block;");
+            parentheses.setAttribute("style", itemRarities[name][1]);
+            parentheses.innerText = " " + itemRarities[name][0];
+            items[i].appendChild(parentheses);
         }
     }
 }
