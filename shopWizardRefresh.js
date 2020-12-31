@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           Neopets - Shop Wizard Refresh
 // @description    Click the header (where the shop wizard is) of the results page to resubmit your search
-// @include        http://www.neopets.com/shops/wizard.phtml
+// @include        http://www.neopets.com/shops/wizard.phtml*
 // ==/UserScript==
 //Note: Shop Wizard refreshing stopped working after the redesign, and staff confirmed this was unintentional
 //This script is a temporary fix
