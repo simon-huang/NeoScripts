@@ -4,13 +4,14 @@
 // @description    Keeps a count of the items and Neopoints you've won today
 // @include        http://www.neopets.com/dome/arena.phtml
 // ==/UserScript==
-window.onload = function () {
+$(document).ready(function () {
     $('#arenacontainer').on('click', '.end_game', function () {
         displayTotals();
     });
-}
+});
 function displayTotals() {
     let rewardsBox = document.getElementById("bd_rewards");
+    //In case of double click
     if (rewardsBox.children[1].children.length > 0) {
         return;
     }
