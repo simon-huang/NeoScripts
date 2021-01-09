@@ -7,7 +7,7 @@
 // @include        http://www.neopets.com/market.phtml?type=your
 // ==/UserScript==
 
-if (/training.phtml?type=status/.test(window.location.href)) {
+if (/training.phtml\?type=status/.test(window.location.href)) {
     let codestones = {};
     let cost = document.body.innerHTML.match(/\w+(?=\s+Codestone)/gm);
     if (cost != null) {
