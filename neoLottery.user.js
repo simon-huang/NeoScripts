@@ -5,8 +5,8 @@
 var numbers = [];
 var current;
 while (numbers.length < 6) {
-    current = Math.round(Math.random()*31);
-    if (current != 0 && current != 31 && !numbers.includes(current)) {
+    current = Math.floor(Math.random()*30) + 1;
+    if (!numbers.includes(current)) {
         numbers.push(current);
     }
 }
