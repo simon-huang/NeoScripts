@@ -2,7 +2,7 @@
 // @author         smthngsaid
 // @name           Neopets - Battledome Prize Counter
 // @description    Keeps a count of the items and Neopoints you've won today
-// @include        http://www.neopets.com/dome/arena.phtml
+// @include        https://www.neopets.com/dome/arena.phtml
 // ==/UserScript==
 $(document).ready(function () {
     $('#arenacontainer').on('click', '.end_game', function () {
