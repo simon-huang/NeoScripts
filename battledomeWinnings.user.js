@@ -1,6 +1,7 @@
 // ==UserScript==
-// @author         smthngsaid
 // @name           Neopets - Battledome Prize Counter
+// @author         smthngsaid
+// @version        2024-11-27
 // @description    Keeps a count of the items and Neopoints you've won today
 // @include        https://www.neopets.com/dome/arena.phtml
 // ==/UserScript==
