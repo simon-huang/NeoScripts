@@ -1,8 +1,9 @@
 // ==UserScript==
+// @name           Neopets - Item Details in Quick Stock
 // @author         smthngsaid
-// @name           Neopets - Item Details in Quick Stock (not Github)
-// @include        http://www.neopets.com/inventory.phtml
-// @include        http://www.neopets.com/quickstock.phtml
+// @version        2024-11-27
+// @include        https://www.neopets.com/inventory.phtml
+// @include        https://www.neopets.com/quickstock.phtml*
 // ==/UserScript==
 if (window.location.href == "http://www.neopets.com/inventory.phtml") {
     $(document).ajaxSuccess(
