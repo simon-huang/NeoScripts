@@ -3,7 +3,8 @@
 // @author         smthngsaid
 // @version        2024-11-27
 // @include        https://www.neopets.com/inventory.phtml
-// @include        https://www.neopets.com/quickstock.phtml*
+// @include        https://www.neopets.com/quickstock.phtml
+// @include        https://www.neopets.com/quickstock.phtml?r=
 // ==/UserScript==
 if (window.location.href == "http://www.neopets.com/inventory.phtml") {
     $(document).ajaxSuccess(
@@ -25,7 +26,7 @@ if (window.location.href == "http://www.neopets.com/inventory.phtml") {
     );
 }
 
-if (window.location.href == "http://www.neopets.com/quickstock.phtml") {
+if (window.location.href == "https://www.neopets.com/quickstock.phtml" || window.location.href == "https://www.neopets.com/quickstock.phtml?r=") {
     let items = $('[name="quickstock"] tr td[align="left"]');
     let itemRarities = JSON.parse(window.localStorage.getItem('rarities'));
     var indexOfCurrentRarity = itemRarities.length - 1;
